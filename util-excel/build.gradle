@@ -1,0 +1,9 @@
+jar {
+    archivesBaseName = 'util-excel'
+}
+
+dependencies {
+    api group: 'org.apache.poi', name: 'poi', version: '4.1.1'
+    api group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.1'
+    implementation project (':util-transition')
+}
