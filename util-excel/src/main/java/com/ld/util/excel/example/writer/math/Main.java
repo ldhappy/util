@@ -1,24 +1,15 @@
-package com.ld.util.excel.example.math;
+package com.ld.util.excel.example.writer.math;
 
-import com.google.common.collect.Lists;
 import com.ld.util.excel.core.ExportColumnHeader;
-import com.ld.util.excel.exception.ExcelException;
-import com.ld.util.excel.writer.AbstractExcelWriter;
 import com.ld.util.excel.writer.DefaultExcelWriter;
 import com.ld.util.excel.writer.output.FileOutputStreamROP;
-import com.ld.util.excel.writer.output.IResultOutPut;
 import com.ld.util.excel.writer.sheet.ISheetWriter;
 import com.ld.util.excel.writer.sheet.StandardSheetWriter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.usermodel.Workbook;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 

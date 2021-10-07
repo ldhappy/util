@@ -1,4 +1,4 @@
-package com.ld.util.excel.example.builder;
+package com.ld.util.excel.example.writer.builder;
 
 import com.ld.util.excel.core.ExportColumnHeader;
 import com.ld.util.excel.writer.DefaultExcelWriter;

@@ -1,4 +1,4 @@
-package com.ld.util.excel.example.annotation;
+package com.ld.util.excel.example.writer.annotation;
 
 import com.ld.util.excel.writer.sheet.annotation.ColumnHeaderRule;
 import com.ld.util.excel.writer.sheet.annotation.SheetRule;

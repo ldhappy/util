@@ -1,11 +1,10 @@
-package com.ld.util.excel.example.math;
+package com.ld.util.excel.example.writer.math;
 
 import lombok.*;
 
 import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * @ClassName OperationConfig
@@ -35,7 +34,7 @@ public class OperationConfig {
     //允许的运算符
     private List<Op> opList;
     //创建方法
-    private Function<OperationConfig,AbstractOperation> createFunction;
+    private Function<OperationConfig, AbstractOperation> createFunction;
 
     @Builder
     public OperationConfig(int sheet,
@@ -45,7 +44,7 @@ public class OperationConfig {
                            int minNum,
                            String fileNamePre,
                            @Singular("op") List<Op> opList,
-                           Function<OperationConfig,AbstractOperation> createFunction) {
+                           Function<OperationConfig, AbstractOperation> createFunction) {
         this.sheet = sheet;
         this.column = column;
         this.row = row;

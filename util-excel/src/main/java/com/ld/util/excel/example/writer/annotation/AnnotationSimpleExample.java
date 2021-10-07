@@ -1,4 +1,4 @@
-package com.ld.util.excel.example.annotation;
+package com.ld.util.excel.example.writer.annotation;
 
 import com.google.common.collect.Lists;
 import com.ld.util.excel.writer.DefaultExcelWriter;

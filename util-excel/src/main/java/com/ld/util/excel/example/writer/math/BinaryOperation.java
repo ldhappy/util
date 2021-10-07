@@ -1,4 +1,4 @@
-package com.ld.util.excel.example.math;
+package com.ld.util.excel.example.writer.math;
 
 import java.util.Random;
 
@@ -8,7 +8,7 @@ import java.util.Random;
  * @Author 梁聃
  * @Date 2021/9/23 16:40
  */
-public class BinaryOperation extends AbstractOperation{
+public class BinaryOperation extends AbstractOperation {
 
     private static final Random random = new Random();
 
