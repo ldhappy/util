@@ -31,7 +31,22 @@ public class ParseException  extends IllegalStateException {
         return this;
     }
 
+    /**
+     * 根据模板创建异常
+     * @param message 国际化模板名称
+     * @param args
+     * @return
+     */
     public static ParseException messageException(String message, Object... args){
         throw new ParseException(String.format(TransitionMessageSource.getAccessor().getMessage(message),args));
+    }
+
+    /**
+     * 根据错误信息创建异常
+     * @param errorInfo
+     * @return
+     */
+    public static ParseException messageException(String errorInfo){
+        throw new ParseException(errorInfo);
     }
 }
