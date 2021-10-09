@@ -15,15 +15,6 @@ public abstract class AbstractParse<S,R> implements IParse ,IParseData<S,R>{
     private S source;
     private R result;
 
-    /**
-     * 错误日志消息
-     */
-    private MessageSourceAccessor messageSourceAccessor = TransitionMessageSource.getAccessor();
-
-    /**
-     * 解析成功标志
-     */
-    private boolean success = false;
     public AbstractParse(S source, R result) {
         this.source = source;
         this.result = result;
@@ -38,7 +29,7 @@ public abstract class AbstractParse<S,R> implements IParse ,IParseData<S,R>{
     }
     protected void sourceIsNotNull(){
         if(source == null){
-            throw new ParseException(getErrorMessage(TransitionMessageSource.SOURCE_NULL));
+            ParseException.messageException(TransitionMessageSource.SOURCE_NULL);
         }
     }
 
@@ -46,7 +37,7 @@ public abstract class AbstractParse<S,R> implements IParse ,IParseData<S,R>{
 
     protected void resultIsNotNull(){
         if(result == null){
-            throw new ParseException(getErrorMessage(TransitionMessageSource.RESULT_NULL));
+            ParseException.messageException(TransitionMessageSource.RESULT_NULL);
         }
     }
 
@@ -56,28 +47,6 @@ public abstract class AbstractParse<S,R> implements IParse ,IParseData<S,R>{
 
     public R getResult() {
         return result;
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    protected void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    public void setMessageSourceAccessor(MessageSourceAccessor messageSourceAccessor) {
-        this.messageSourceAccessor = messageSourceAccessor;
-    }
-
-    /**
-     * 根据code查询提示语
-     * @param messageCode
-     * @return
-     */
-    @Override
-    public String getErrorMessage(String messageCode) {
-        return messageSourceAccessor.getMessage(messageCode);
     }
 
 }

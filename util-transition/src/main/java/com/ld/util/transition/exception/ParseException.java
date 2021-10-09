@@ -1,5 +1,7 @@
 package com.ld.util.transition.exception;
 
+import com.ld.util.transition.message.TransitionMessageSource;
+
 /**
  * 导入文件过程中的异常
  * 梁聃 2018/3/13 11:34
@@ -16,26 +18,8 @@ public class ParseException  extends IllegalStateException {
      * @param message the detail message. The detail message is saved for
      *                later retrieval by the {@link #getMessage()} method.
      */
-    public ParseException(String message) {
+    private ParseException(String message) {
         super(message);
-    }
-
-    /**
-     * Constructs a new runtime exception with the specified detail message and
-     * cause.  <p>Note that the detail message associated with
-     * {@code cause} is <i>not</i> automatically incorporated in
-     * this runtime exception's detail message.
-     *
-     * @param message the detail message (which is saved for later retrieval
-     *                by the {@link #getMessage()} method).
-     * @param cause   the cause (which is saved for later retrieval by the
-     *                {@link #getCause()} method).  (A <tt>null</tt> value is
-     *                permitted, and indicates that the cause is nonexistent or
-     *                unknown.)
-     * @since 1.4
-     */
-    public ParseException(String message, Throwable cause) {
-        super(message, cause);
     }
 
     /**
@@ -45,5 +29,9 @@ public class ParseException  extends IllegalStateException {
     @Override
     public Throwable fillInStackTrace() {
         return this;
+    }
+
+    public static ParseException messageException(String message, Object... args){
+        throw new ParseException(String.format(TransitionMessageSource.getAccessor().getMessage(message),args));
     }
 }

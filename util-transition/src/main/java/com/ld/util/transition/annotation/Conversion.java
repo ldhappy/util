@@ -12,4 +12,6 @@ import java.lang.annotation.*;
 public @interface Conversion  {
     //转换规则类
     Class convertRuleClass();
+    //转换规则入参配合convertRuleClass使用
+    String convertRuleClassInitJson() default "";
 }

@@ -14,6 +14,8 @@ public @interface Regulation {
     String rule() default "";
     //校验类，该属性有值时正则不生效
     Class ruleClass() default Object.class;
+    //规则入参配合ruleClass使用
+    String ruleClassInitJson() default "";
     //错误信息
     String errorInfo() default "不满足规则表达式";
     //必填字段

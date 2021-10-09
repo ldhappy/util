@@ -21,12 +21,6 @@ public abstract class ListMapParse<R> implements IParse {
     private Class<R> resultClass;
     private List<Map<String,Object>> errorList = new ArrayList<Map<String, Object>>();
     private String errorInfoField = "listMapParseErrorInfo";
-
-    /**
-     * 错误日志消息
-     */
-    private MessageSourceAccessor messageSourceAccessor = TransitionMessageSource.getAccessor();
-
     /**
      * 解析成功标志
      */
@@ -48,12 +42,12 @@ public abstract class ListMapParse<R> implements IParse {
     }
     protected void sourceIsNotNull(){
         if(source == null){
-            throw new ParseException(getErrorMessage(TransitionMessageSource.SOURCE_NULL));
+            ParseException.messageException(TransitionMessageSource.SOURCE_NULL);
         }
     }
     protected void resultIsNotNull(){
         if(result == null){
-            throw new ParseException(getErrorMessage(TransitionMessageSource.RESULT_NULL));
+            ParseException.messageException(TransitionMessageSource.RESULT_NULL);
         }
     }
     public void parse() {
@@ -64,18 +58,7 @@ public abstract class ListMapParse<R> implements IParse {
                 R r = (R) resultClass.newInstance();
                 MapParse<R> mp = new MapParse<>(map,r);
                 mp.parse();
-                if(mp.isSuccess()){
-                    result.add(r);
-                }else{
-                    map.put(errorInfoField,getErrorMessage(TransitionMessageSource.PARSE_FAIL));
-                    errorList.add(map);
-                }
-            }catch (IllegalAccessException e) {
-                map.put(errorInfoField,getErrorMessage(TransitionMessageSource.CREATE_RESULT_EXCEPTION+e.getMessage()));
-                errorList.add(map);
-            } catch (InstantiationException e) {
-                map.put(errorInfoField,getErrorMessage(TransitionMessageSource.CREATE_RESULT_EXCEPTION+e.getMessage()));
-                errorList.add(map);
+                result.add(r);
             }catch (Exception e) {
                 map.put(errorInfoField,e.getMessage());
                 errorList.add(map);
@@ -113,16 +96,4 @@ public abstract class ListMapParse<R> implements IParse {
         return success;
     }
 
-    public void setMessageSourceAccessor(MessageSourceAccessor messageSourceAccessor) {
-        this.messageSourceAccessor = messageSourceAccessor;
-    }
-
-    /**
-     * 根据code查询提示语
-     * @param messageCode
-     * @return
-     */
-    public String getErrorMessage(String messageCode) {
-        return messageSourceAccessor.getMessage(messageCode);
-    }
 }

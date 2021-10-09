@@ -28,11 +28,4 @@ public interface IParseDataGet<S,R> {
      * @return
      */
     Object getSourceField(String fieldName);
-
-    /**
-     * 根据code查询提示语
-     * @param messageCode
-     * @return
-     */
-    String getErrorMessage(String messageCode);
 }

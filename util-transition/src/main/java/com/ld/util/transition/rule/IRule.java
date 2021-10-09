@@ -1,5 +1,7 @@
 package com.ld.util.transition.rule;
 
+import com.ld.util.transition.exception.RuleException;
+
 /**
  * 校验规则接口
  * 梁聃 2018/3/13 21:26
@@ -10,11 +12,11 @@ public interface IRule {
      * @param source
      * @return
      */
-    boolean match(Object source);
+    void match(Object source) throws RuleException;
 
     /**
-     * 校验后读取错误信息
-     * @return
+     * 帮助解决创建规则对象需要入参的问题
+     * @param initJson 创建规则需要的入参，入参需要遵守json的规范
      */
-    String errorInfo();
+    default void init(String initJson){}
 }

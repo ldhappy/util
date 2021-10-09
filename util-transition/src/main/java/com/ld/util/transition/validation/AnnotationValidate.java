@@ -2,6 +2,7 @@ package com.ld.util.transition.validation;
 
 import com.ld.util.transition.annotation.Regulation;
 import com.ld.util.transition.exception.ParseException;
+import com.ld.util.transition.exception.RuleException;
 import com.ld.util.transition.message.TransitionMessageSource;
 import com.ld.util.transition.parse.IParseDataGet;
 import com.ld.util.transition.rule.IRule;
@@ -24,7 +25,7 @@ public class AnnotationValidate<S,R>  implements IValidate{
         this.parseData = parseData;
     }
 
-    public void validate() throws IllegalAccessException, InstantiationException {
+    public void validate(){
         S source = parseData.getSource();
         R result = parseData.getResult();
         AnnotationValidateClassReflect classReflect = getClassReflect(result);
@@ -42,26 +43,34 @@ public class AnnotationValidate<S,R>  implements IValidate{
                 Object value = parseData.getSourceField(name);
                 if (value != null) {
                     if (!regulation.ruleClass().equals(Object.class)) {
-                        Object object = regulation.ruleClass().newInstance();
+                        Object object = null;
+                        try {
+                            object = regulation.ruleClass().newInstance();
+                        } catch (IllegalAccessException e) {
+                            ParseException.messageException(TransitionMessageSource.VALIDATE_EXCEPTION_CREATE_RULE_CLASS, errorTipName, e.getMessage());
+                        } catch (InstantiationException e) {
+                            ParseException.messageException(TransitionMessageSource.VALIDATE_EXCEPTION_CREATE_RULE_CLASS, errorTipName, e.getMessage());
+                        }
                         if (object instanceof IRule) {
                             IRule rule = (IRule) object;
-                            if (rule.match(value)) {
-                                continue;
-                            } else {
-                                throw new ParseException(parseData.getErrorMessage(TransitionMessageSource.RULE_EXCEPTION) + errorTipName + "---" + rule.errorInfo());
+                            try {
+                                rule.init(regulation.ruleClassInitJson());
+                                rule.match(value);
+                            } catch (Exception e) {
+                                ParseException.messageException(TransitionMessageSource.VALIDATE_EXCEPTION_UNMATCHED,errorTipName,e.getMessage());
                             }
                         } else {
-                            throw new ParseException(parseData.getErrorMessage(TransitionMessageSource.RULE_EXCEPTION) + errorTipName + "---" + "配置的规则类" + regulation.ruleClass().getCanonicalName() + "必须实现" + IRule.class.getCanonicalName());
+                            ParseException.messageException(TransitionMessageSource.VALIDATE_EXCEPTION_RULE_CLASS_IMPL,errorTipName,regulation.ruleClass().getCanonicalName(),IRule.class.getCanonicalName());
                         }
                     } else if (StringUtils.isNotBlank(regulation.rule())) {
                         if (value.toString().matches(regulation.rule())) {
                             continue;
                         } else {
-                            throw new ParseException(parseData.getErrorMessage(TransitionMessageSource.RULE_EXCEPTION) + errorTipName + "---" + regulation.errorInfo());
+                            ParseException.messageException(TransitionMessageSource.VALIDATE_EXCEPTION_UNMATCHED,errorTipName,regulation.errorInfo());
                         }
                     }
                 } else if (regulation.required()) {
-                    throw new ParseException(parseData.getErrorMessage(TransitionMessageSource.RULE_EXCEPTION) + "缺少必填字段" + errorTipName);
+                    ParseException.messageException(TransitionMessageSource.VALIDATE_EXCEPTION_NULL,errorTipName);
                 }
             }
         }

@@ -19,7 +19,7 @@ public class AnnotationConvert<S,R>  implements IConvert{
         this.parseData = parseData;
     }
 
-    public void convert() throws IllegalAccessException, InstantiationException {
+    public void convert(){
         S source = parseData.getSource();
         R result = parseData.getResult();
 
@@ -34,25 +34,30 @@ public class AnnotationConvert<S,R>  implements IConvert{
                 if (conversion != null){
                     Object object = null;
                     try {
-                        object = conversion.convertRuleClass().getConstructor().newInstance();
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
-                    } catch (NoSuchMethodException e) {
-                        e.printStackTrace();
+                        object = conversion.convertRuleClass().newInstance();
+                    } catch (IllegalAccessException e) {
+                        ParseException.messageException(TransitionMessageSource.CONVERT_EXCEPTION_CREATE_RULE_CLASS, errorTipName, e.getMessage());
+                    } catch (InstantiationException e) {
+                        ParseException.messageException(TransitionMessageSource.CONVERT_EXCEPTION_CREATE_RULE_CLASS, errorTipName, e.getMessage());
                     }
                     if (object instanceof IConvertRule){
                         IConvertRule rule = (IConvertRule) object;
                         try {
+                            rule.init(conversion.convertRuleClassInitJson());
                             value = rule.convert(value);
                         } catch (ConvertException e) {
-                            throw new ParseException(parseData.getErrorMessage(TransitionMessageSource.RULE_EXCEPTION) + errorTipName + "---" + e.getMessage());
+                            ParseException.messageException(TransitionMessageSource.CONVERT_EXCEPTION_UNABLE_TO_CONVERT, errorTipName, e.getMessage());
                         }
                     } else {
-                        throw new ParseException(parseData.getErrorMessage(TransitionMessageSource.RULE_EXCEPTION) + errorTipName + "---" + "配置的规则类" + conversion.convertRuleClass().getCanonicalName() + "必须实现" + IConvertRule.class.getCanonicalName());
+                        ParseException.messageException(TransitionMessageSource.CONVERT_EXCEPTION_RULE_CLASS_IMPL, errorTipName, conversion.convertRuleClass().getCanonicalName(),IConvertRule.class.getCanonicalName());
                     }
 
                 }
-                field.set(result,value);
+                try {
+                    field.set(result,value);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
