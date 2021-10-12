@@ -1,6 +1,7 @@
 package com.ld.util.excel.writer.sheet.annotation;
 
 import com.ld.util.excel.exception.ExcelException;
+import com.ld.util.excel.message.ExcelMessageSource;
 import com.ld.util.transition.annotation.Conversion;
 import com.ld.util.transition.annotation.Name;
 import org.apache.commons.lang3.StringUtils;
@@ -30,7 +31,7 @@ public class AnnotationFieldColumnHeaderClassReflect<T> {
         List<FieldColumnHeader> list = new ArrayList<>();
         SheetRule sheetRule = clazz.getAnnotation(SheetRule.class);
         if(Objects.isNull(sheetRule) || StringUtils.isBlank(sheetRule.name())){
-            throw new ExcelException("需要导出的数据类型："+clazz.getName()+"未设置工作表名称，无法完成导出工作");
+            ExcelException.messageException(ExcelMessageSource.WRITE_SHEET_ANNOTATION_SHEET_RULE_NAME_EMPTY);
         }
         sheetName = sheetRule.name();
         for (Field field : clazz.getDeclaredFields()) {
@@ -46,7 +47,7 @@ public class AnnotationFieldColumnHeaderClassReflect<T> {
             }
         }
         if(list.size() == 0){
-            throw new ExcelException("需要导出的数据类型："+clazz.getName()+"未设置列头信息，无法完成导出工作");
+            ExcelException.messageException(ExcelMessageSource.WRITE_SHEET_ANNOTATION_COLUMN_HEADER_RULE_EMPTY);
         }
         fieldColumnHeaderList = list.stream().sorted().collect(Collectors.toList());
     }

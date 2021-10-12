@@ -4,7 +4,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 /**
  * @ClassName ISheetWriter
- * @Description sheet输出接口
+ * @Description sheet写入接口
  * @Author 梁聃
  * @Date 2021/9/22 15:07
  */

@@ -2,6 +2,7 @@ package com.ld.util.excel.writer.sheet;
 
 import com.ld.util.excel.core.ExportColumnHeader;
 import com.ld.util.excel.exception.ExcelException;
+import com.ld.util.excel.message.ExcelMessageSource;
 import com.ld.util.excel.util.ExcelUtil;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +58,7 @@ public class StandardSheetWriter<T> extends AbstactSheetWriter implements ISheet
     public StandardSheetWriter(String sheetName,@Singular("columnHeader") List<ExportColumnHeader<T, ?>> columnHeaderList,@Singular("content") List<T> contentList,Boolean needDefaultCoordinate) {
         super(sheetName);
         if(CollectionUtils.isEmpty(columnHeaderList)){
-            throw new ExcelException("您未设置导出数据列，数据无法导出");
+            ExcelException.messageException(ExcelMessageSource.WRITE_SHEET_HEADER_EMPTY);
         }
         if(Objects.nonNull(needDefaultCoordinate) && needDefaultCoordinate){
             //设置默认的列序号

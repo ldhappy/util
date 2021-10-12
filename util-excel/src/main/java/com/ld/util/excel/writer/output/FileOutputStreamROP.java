@@ -1,6 +1,7 @@
 package com.ld.util.excel.writer.output;
 
 import com.ld.util.excel.exception.ExcelException;
+import com.ld.util.excel.message.ExcelMessageSource;
 import com.ld.util.excel.writer.AbstractExcelWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -43,7 +44,8 @@ public class FileOutputStreamROP implements IResultOutPut<String>  {
             return file.getAbsolutePath();
         } catch (IOException e) {
             log.error("导出文件异常，原因：",e);
-            throw new ExcelException("导出文件异常，原因：" + e.getMessage());
+            ExcelException.messageException(ExcelMessageSource.WRITE_ERROR,e.getMessage());
+            return "";
         }
     }
 }

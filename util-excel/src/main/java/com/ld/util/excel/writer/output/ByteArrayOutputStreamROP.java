@@ -1,6 +1,7 @@
 package com.ld.util.excel.writer.output;
 
 import com.ld.util.excel.exception.ExcelException;
+import com.ld.util.excel.message.ExcelMessageSource;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.ByteArrayOutputStream;
@@ -26,7 +27,7 @@ public class ByteArrayOutputStreamROP implements IResultOutPut<ByteArrayOutputSt
         try {
             workbook.write(os);
         } catch (IOException e) {
-            throw new ExcelException("导出文件异常，原因："+e.getMessage());
+            ExcelException.messageException(ExcelMessageSource.WRITE_ERROR,e.getMessage());
         }
         return os;
     }

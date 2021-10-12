@@ -1,6 +1,7 @@
 package com.ld.util.excel.writer;
 
 import com.ld.util.excel.exception.ExcelException;
+import com.ld.util.excel.message.ExcelMessageSource;
 import com.ld.util.excel.writer.output.IResultOutPut;
 import com.ld.util.excel.writer.sheet.ISheetWriter;
 import lombok.Builder;
@@ -28,7 +29,7 @@ public class DefaultExcelWriter<R> extends AbstractExcelWriter<R>{
     public DefaultExcelWriter(String fileNamePre, IResultOutPut resultOutPut, Integer rowAccessWindowSize,@Singular("sheetWriter") List<ISheetWriter> sheetWriterList) {
         super(fileNamePre, resultOutPut, rowAccessWindowSize);
         if(CollectionUtils.isEmpty(sheetWriterList)){
-            throw new ExcelException("您未设置需要书写到工作表的内容，数据无法导出");
+            ExcelException.messageException(ExcelMessageSource.WRITE_SHEET_EMPTY);
         }
         this.sheetWriterList = sheetWriterList;
     }

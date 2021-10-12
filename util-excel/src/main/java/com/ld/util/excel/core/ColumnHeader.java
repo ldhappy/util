@@ -1,6 +1,7 @@
 package com.ld.util.excel.core;
 
 import com.ld.util.excel.exception.ExcelException;
+import com.ld.util.excel.message.ExcelMessageSource;
 import com.ld.util.excel.util.ExcelUtil;
 import lombok.*;
 import org.apache.commons.lang3.StringUtils;
@@ -17,7 +18,7 @@ import java.util.Objects;
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
-public class ColumnHeader {
+public class ColumnHeader implements Comparable<ColumnHeader>{
     /**
      * 列名称
      */
@@ -108,7 +109,7 @@ public class ColumnHeader {
             }
             coordinateColumn = ExcelUtil.excelColStrToNum(sb.toString());
         }else{
-            throw new ExcelException("当前坐标异常，请检查设置。坐标需满足^[A-Z]+[0-9]+$");
+            ExcelException.messageException(ExcelMessageSource.HEADER_COORDINATE_ERROR);
         }
     }
 
@@ -116,5 +117,50 @@ public class ColumnHeader {
         ColumnHeader columnHeader = ColumnHeader.columnHeaderBuilder().columnName("test").coordinate("A1").build();
         System.out.println(columnHeader.toString());
         System.out.println(columnHeader.setCoordinate("B2").toString());
+    }
+
+    /**
+     * Compares this object with the specified object for order.  Returns a
+     * negative integer, zero, or a positive integer as this object is less
+     * than, equal to, or greater than the specified object.
+     *
+     * <p>The implementor must ensure <tt>sgn(x.compareTo(y)) ==
+     * -sgn(y.compareTo(x))</tt> for all <tt>x</tt> and <tt>y</tt>.  (This
+     * implies that <tt>x.compareTo(y)</tt> must throw an exception iff
+     * <tt>y.compareTo(x)</tt> throws an exception.)
+     *
+     * <p>The implementor must also ensure that the relation is transitive:
+     * <tt>(x.compareTo(y)&gt;0 &amp;&amp; y.compareTo(z)&gt;0)</tt> implies
+     * <tt>x.compareTo(z)&gt;0</tt>.
+     *
+     * <p>Finally, the implementor must ensure that <tt>x.compareTo(y)==0</tt>
+     * implies that <tt>sgn(x.compareTo(z)) == sgn(y.compareTo(z))</tt>, for
+     * all <tt>z</tt>.
+     *
+     * <p>It is strongly recommended, but <i>not</i> strictly required that
+     * <tt>(x.compareTo(y)==0) == (x.equals(y))</tt>.  Generally speaking, any
+     * class that implements the <tt>Comparable</tt> interface and violates
+     * this condition should clearly indicate this fact.  The recommended
+     * language is "Note: this class has a natural ordering that is
+     * inconsistent with equals."
+     *
+     * <p>In the foregoing description, the notation
+     * <tt>sgn(</tt><i>expression</i><tt>)</tt> designates the mathematical
+     * <i>signum</i> function, which is defined to return one of <tt>-1</tt>,
+     * <tt>0</tt>, or <tt>1</tt> according to whether the value of
+     * <i>expression</i> is negative, zero or positive.
+     *
+     * @param o the object to be compared.
+     * @return a negative integer, zero, or a positive integer as this object
+     * is less than, equal to, or greater than the specified object.
+     * @throws NullPointerException if the specified object is null
+     * @throws ClassCastException   if the specified object's type prevents it
+     *                              from being compared to this object.
+     */
+    @Override
+    public int compareTo(ColumnHeader o) {
+        int rowCompareResult = Integer.compare(getCoordinateRow(),o.getCoordinateRow());
+        //行号相等时，对比列号，不等时直接返回行号对比结果
+        return rowCompareResult == 0? Integer.compare(getCoordinateColumn(),o.getCoordinateColumn()):rowCompareResult;
     }
 }
