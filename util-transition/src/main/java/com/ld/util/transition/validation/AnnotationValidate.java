@@ -47,9 +47,9 @@ public class AnnotationValidate<S,R>  implements IValidate{
                         try {
                             object = regulation.ruleClass().newInstance();
                         } catch (IllegalAccessException e) {
-                            ParseException.messageException(TransitionMessageSource.VALIDATE_EXCEPTION_CREATE_RULE_CLASS, errorTipName, e.getMessage());
+                            throw ParseException.messageException(TransitionMessageSource.VALIDATE_EXCEPTION_CREATE_RULE_CLASS, errorTipName, e.getMessage());
                         } catch (InstantiationException e) {
-                            ParseException.messageException(TransitionMessageSource.VALIDATE_EXCEPTION_CREATE_RULE_CLASS, errorTipName, e.getMessage());
+                            throw ParseException.messageException(TransitionMessageSource.VALIDATE_EXCEPTION_CREATE_RULE_CLASS, errorTipName, e.getMessage());
                         }
                         if (object instanceof IRule) {
                             IRule rule = (IRule) object;
@@ -57,20 +57,20 @@ public class AnnotationValidate<S,R>  implements IValidate{
                                 rule.init(regulation.ruleClassInitJson());
                                 rule.match(value);
                             } catch (Exception e) {
-                                ParseException.messageException(TransitionMessageSource.VALIDATE_EXCEPTION_UNMATCHED,errorTipName,e.getMessage());
+                                throw ParseException.messageException(TransitionMessageSource.VALIDATE_EXCEPTION_UNMATCHED,errorTipName,e.getMessage());
                             }
                         } else {
-                            ParseException.messageException(TransitionMessageSource.VALIDATE_EXCEPTION_RULE_CLASS_IMPL,errorTipName,regulation.ruleClass().getCanonicalName(),IRule.class.getCanonicalName());
+                            throw ParseException.messageException(TransitionMessageSource.VALIDATE_EXCEPTION_RULE_CLASS_IMPL,errorTipName,regulation.ruleClass().getCanonicalName(),IRule.class.getCanonicalName());
                         }
                     } else if (StringUtils.isNotBlank(regulation.rule())) {
                         if (value.toString().matches(regulation.rule())) {
                             continue;
                         } else {
-                            ParseException.messageException(TransitionMessageSource.VALIDATE_EXCEPTION_UNMATCHED,errorTipName,regulation.errorInfo());
+                            throw ParseException.messageException(TransitionMessageSource.VALIDATE_EXCEPTION_UNMATCHED,errorTipName,regulation.errorInfo());
                         }
                     }
                 } else if (regulation.required()) {
-                    ParseException.messageException(TransitionMessageSource.VALIDATE_EXCEPTION_NULL,errorTipName);
+                    throw ParseException.messageException(TransitionMessageSource.VALIDATE_EXCEPTION_NULL,errorTipName);
                 }
             }
         }

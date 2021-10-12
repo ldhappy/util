@@ -42,12 +42,12 @@ public abstract class ListMapParse<R> implements IParse {
     }
     protected void sourceIsNotNull(){
         if(source == null){
-            ParseException.messageException(TransitionMessageSource.SOURCE_NULL);
+            throw ParseException.messageException(TransitionMessageSource.SOURCE_NULL);
         }
     }
     protected void resultIsNotNull(){
         if(result == null){
-            ParseException.messageException(TransitionMessageSource.RESULT_NULL);
+            throw ParseException.messageException(TransitionMessageSource.RESULT_NULL);
         }
     }
     public void parse() {

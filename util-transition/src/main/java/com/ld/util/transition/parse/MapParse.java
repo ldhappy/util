@@ -56,7 +56,7 @@ public class MapParse<R> extends AbstractParse<Map, R> {
         if (convert != null) {
             convert.convert();
         } else {
-            ParseException.messageException(TransitionMessageSource.MUST_CONVERT);
+            throw ParseException.messageException(TransitionMessageSource.MUST_CONVERT);
         }
     }
 
@@ -66,7 +66,7 @@ public class MapParse<R> extends AbstractParse<Map, R> {
         if (validate != null) {
             validate.validate();
         } else if (mustValidate) {
-            ParseException.messageException(TransitionMessageSource.MUST_VALIDATE);
+            throw ParseException.messageException(TransitionMessageSource.MUST_VALIDATE);
         }
     }
 

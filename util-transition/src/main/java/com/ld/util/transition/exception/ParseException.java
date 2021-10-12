@@ -38,7 +38,7 @@ public class ParseException  extends IllegalStateException {
      * @return
      */
     public static ParseException messageException(String message, Object... args){
-        throw new ParseException(String.format(TransitionMessageSource.getAccessor().getMessage(message),args));
+        return new ParseException(String.format(TransitionMessageSource.getAccessor().getMessage(message),args));
     }
 
     /**
@@ -46,7 +46,7 @@ public class ParseException  extends IllegalStateException {
      * @param errorInfo
      * @return
      */
-    public static ParseException messageException(String errorInfo){
-        throw new ParseException(errorInfo);
+    public static ParseException infoException(String errorInfo){
+        return new ParseException(errorInfo);
     }
 }

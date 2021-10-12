@@ -29,7 +29,7 @@ public abstract class AbstractParse<S,R> implements IParse ,IParseData<S,R>{
     }
     protected void sourceIsNotNull(){
         if(source == null){
-            ParseException.messageException(TransitionMessageSource.SOURCE_NULL);
+            throw ParseException.messageException(TransitionMessageSource.SOURCE_NULL);
         }
     }
 
@@ -37,7 +37,7 @@ public abstract class AbstractParse<S,R> implements IParse ,IParseData<S,R>{
 
     protected void resultIsNotNull(){
         if(result == null){
-            ParseException.messageException(TransitionMessageSource.RESULT_NULL);
+            throw ParseException.messageException(TransitionMessageSource.RESULT_NULL);
         }
     }
 

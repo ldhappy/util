@@ -36,9 +36,9 @@ public class AnnotationConvert<S,R>  implements IConvert{
                     try {
                         object = conversion.convertRuleClass().newInstance();
                     } catch (IllegalAccessException e) {
-                        ParseException.messageException(TransitionMessageSource.CONVERT_EXCEPTION_CREATE_RULE_CLASS, errorTipName, e.getMessage());
+                        throw ParseException.messageException(TransitionMessageSource.CONVERT_EXCEPTION_CREATE_RULE_CLASS, errorTipName, e.getMessage());
                     } catch (InstantiationException e) {
-                        ParseException.messageException(TransitionMessageSource.CONVERT_EXCEPTION_CREATE_RULE_CLASS, errorTipName, e.getMessage());
+                        throw ParseException.messageException(TransitionMessageSource.CONVERT_EXCEPTION_CREATE_RULE_CLASS, errorTipName, e.getMessage());
                     }
                     if (object instanceof IConvertRule){
                         IConvertRule rule = (IConvertRule) object;
@@ -46,10 +46,10 @@ public class AnnotationConvert<S,R>  implements IConvert{
                             rule.init(conversion.convertRuleClassInitJson());
                             value = rule.convert(value);
                         } catch (ConvertException e) {
-                            ParseException.messageException(TransitionMessageSource.CONVERT_EXCEPTION_UNABLE_TO_CONVERT, errorTipName, e.getMessage());
+                            throw ParseException.messageException(TransitionMessageSource.CONVERT_EXCEPTION_UNABLE_TO_CONVERT, errorTipName, e.getMessage());
                         }
                     } else {
-                        ParseException.messageException(TransitionMessageSource.CONVERT_EXCEPTION_RULE_CLASS_IMPL, errorTipName, conversion.convertRuleClass().getCanonicalName(),IConvertRule.class.getCanonicalName());
+                        throw ParseException.messageException(TransitionMessageSource.CONVERT_EXCEPTION_RULE_CLASS_IMPL, errorTipName, conversion.convertRuleClass().getCanonicalName(),IConvertRule.class.getCanonicalName());
                     }
 
                 }
