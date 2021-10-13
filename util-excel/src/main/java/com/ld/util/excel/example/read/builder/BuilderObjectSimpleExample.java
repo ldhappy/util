@@ -29,7 +29,7 @@ public class BuilderObjectSimpleExample {
                 .targetClass(People.class)
                 .build();
         ExcelReader<People> excelReader = new ExcelReader<>(new FileSourceInput(),readRule);
-        ReadResult<People> readResult = excelReader.read("d:/BuilderObjectSimpleExample_1634087556390.xlsx");
+        ReadResult<People> readResult = excelReader.read("d:/BuilderObjectSimpleExample_1634087556390.xlsss");
         log.info(readResult.toString());
     }
 }

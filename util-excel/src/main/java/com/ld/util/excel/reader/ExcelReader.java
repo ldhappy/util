@@ -5,6 +5,7 @@ import com.ld.util.excel.exception.ExcelException;
 import com.ld.util.excel.message.ExcelMessageSource;
 import com.ld.util.excel.reader.content.DefaultRowContentReader;
 import com.ld.util.excel.reader.content.RowContentReader;
+import com.ld.util.excel.reader.hssf.XlsReader;
 import com.ld.util.excel.reader.input.ISourceInput;
 import com.ld.util.excel.reader.rule.ReadRule;
 import com.ld.util.excel.reader.xssf.XlsxReader;
@@ -25,7 +26,8 @@ import java.util.Objects;
 public class ExcelReader<T> {
     //处理的文件后缀名合集
     private static final List<IInputStreamReader> readerList = Lists.newArrayList(
-            new XlsxReader()
+            new XlsxReader(),
+            new XlsReader()
     );
 
     /**
