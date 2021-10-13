@@ -1,10 +1,13 @@
 package com.ld.util.excel.writer.sheet;
 
+import com.ld.util.excel.exception.ExcelException;
+import com.ld.util.excel.message.ExcelMessageSource;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +29,9 @@ public abstract class AbstactSheetWriter implements ISheetWriter {
     protected String sheetName;
 
     public AbstactSheetWriter(String sheetName) {
+        if(StringUtils.isBlank(sheetName)){
+            throw ExcelException.messageException(ExcelMessageSource.WRITE_SHEET_NAME_EMPTY);
+        }
         this.sheetName = sheetName;
     }
 

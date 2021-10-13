@@ -30,7 +30,7 @@ public class ExcelException extends IllegalStateException  {
      * @return
      */
     public static ExcelException messageException(String message, Object... args){
-        throw new ExcelException(String.format(ExcelMessageSource.getAccessor().getMessage(message),args));
+        return new ExcelException(String.format(ExcelMessageSource.getAccessor().getMessage(message),args));
     }
 
     /**
@@ -39,6 +39,6 @@ public class ExcelException extends IllegalStateException  {
      * @return
      */
     public static ExcelException infoException(String errorInfo){
-        throw new ExcelException(errorInfo);
+        return new ExcelException(errorInfo);
     }
 }

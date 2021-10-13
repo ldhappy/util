@@ -1,7 +1,10 @@
 package com.ld.util.excel.writer;
 
+import com.ld.util.excel.exception.ExcelException;
+import com.ld.util.excel.message.ExcelMessageSource;
 import com.ld.util.excel.writer.output.IResultOutPut;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -33,17 +36,29 @@ public abstract class AbstractExcelWriter<R> {
     private Integer rowAccessWindowSize;
 
     public AbstractExcelWriter(String fileNamePre, IResultOutPut<R> resultOutPut, Integer rowAccessWindowSize) {
+        if(StringUtils.isBlank(fileNamePre)){
+            throw ExcelException.messageException(ExcelMessageSource.WRITE_FILE_NAME_PRE_EMPTY);
+        }
         this.fileNamePre = fileNamePre;
+        if(Objects.isNull(resultOutPut)){
+            throw ExcelException.messageException(ExcelMessageSource.WRITE_RESULT_OUTPUT_EMPTY);
+        }
         this.resultOutPut = resultOutPut;
         this.rowAccessWindowSize = Objects.isNull(rowAccessWindowSize)?1000:rowAccessWindowSize;
     }
 
-    public R write(){
-        //采用性能更高的SXSSFWorkbook方式
-        SXSSFWorkbook workbook = new SXSSFWorkbook(new XSSFWorkbook(), rowAccessWindowSize);
-        //在扩展类中写入每个工作表的内容
-        writeSheetContent(workbook);
-        return resultOutPut.outPut(fileNamePre,workbook);
+    public R write() throws ExcelException{
+        try {
+            //采用性能更高的SXSSFWorkbook方式
+            SXSSFWorkbook workbook = new SXSSFWorkbook(new XSSFWorkbook(), rowAccessWindowSize);
+            //在扩展类中写入每个工作表的内容
+            writeSheetContent(workbook);
+            return resultOutPut.outPut(fileNamePre, workbook);
+        } catch (Exception e) {
+            log.error("导出文件异常，原因：",e);
+            throw ExcelException.messageException(ExcelMessageSource.WRITE_ERROR,e.getMessage());
+
+        }
     }
 
     /**

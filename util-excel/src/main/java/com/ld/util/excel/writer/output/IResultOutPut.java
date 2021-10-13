@@ -15,5 +15,5 @@ public interface IResultOutPut<R> {
      * @param workbook
      * @return
      */
-    R outPut(String fileNamePre, Workbook workbook);
+    R outPut(String fileNamePre, Workbook workbook) throws Exception ;
 }

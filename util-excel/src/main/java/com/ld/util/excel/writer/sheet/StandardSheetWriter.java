@@ -58,7 +58,7 @@ public class StandardSheetWriter<T> extends AbstactSheetWriter implements ISheet
     public StandardSheetWriter(String sheetName,@Singular("columnHeader") List<ExportColumnHeader<T, ?>> columnHeaderList,@Singular("content") List<T> contentList,Boolean needDefaultCoordinate) {
         super(sheetName);
         if(CollectionUtils.isEmpty(columnHeaderList)){
-            ExcelException.messageException(ExcelMessageSource.WRITE_SHEET_HEADER_EMPTY);
+            throw ExcelException.messageException(ExcelMessageSource.WRITE_SHEET_HEADER_EMPTY);
         }
         if(Objects.nonNull(needDefaultCoordinate) && needDefaultCoordinate){
             //设置默认的列序号

@@ -29,7 +29,7 @@ public class DefaultExcelWriter<R> extends AbstractExcelWriter<R>{
     public DefaultExcelWriter(String fileNamePre, IResultOutPut resultOutPut, Integer rowAccessWindowSize,@Singular("sheetWriter") List<ISheetWriter> sheetWriterList) {
         super(fileNamePre, resultOutPut, rowAccessWindowSize);
         if(CollectionUtils.isEmpty(sheetWriterList)){
-            ExcelException.messageException(ExcelMessageSource.WRITE_SHEET_EMPTY);
+            throw ExcelException.messageException(ExcelMessageSource.WRITE_SHEET_EMPTY);
         }
         this.sheetWriterList = sheetWriterList;
     }

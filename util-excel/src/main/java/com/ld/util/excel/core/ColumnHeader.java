@@ -109,7 +109,7 @@ public class ColumnHeader implements Comparable<ColumnHeader>{
             }
             coordinateColumn = ExcelUtil.excelColStrToNum(sb.toString());
         }else{
-            ExcelException.messageException(ExcelMessageSource.HEADER_COORDINATE_ERROR);
+            throw ExcelException.messageException(ExcelMessageSource.HEADER_COORDINATE_ERROR);
         }
     }
 

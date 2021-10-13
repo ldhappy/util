@@ -33,19 +33,13 @@ public class FileOutputStreamROP implements IResultOutPut<String>  {
      * @return
      */
     @Override
-    public String outPut(String fileNamePre, Workbook workbook) {
-        try {
-            File file = new File(pathName + fileNamePre + "_" + System.currentTimeMillis() + AbstractExcelWriter.XLSX_EXT);
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            workbook.write(fileOutputStream);
-            return file.getAbsolutePath();
-        } catch (IOException e) {
-            log.error("导出文件异常，原因：",e);
-            ExcelException.messageException(ExcelMessageSource.WRITE_ERROR,e.getMessage());
-            return "";
+    public String outPut(String fileNamePre, Workbook workbook) throws Exception {
+        File file = new File(pathName + fileNamePre + "_" + System.currentTimeMillis() + AbstractExcelWriter.XLSX_EXT);
+        if (!file.exists()) {
+            file.createNewFile();
         }
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        workbook.write(fileOutputStream);
+        return file.getAbsolutePath();
     }
 }

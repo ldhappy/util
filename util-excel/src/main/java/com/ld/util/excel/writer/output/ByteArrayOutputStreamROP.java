@@ -22,13 +22,9 @@ public class ByteArrayOutputStreamROP implements IResultOutPut<ByteArrayOutputSt
      * @return
      */
     @Override
-    public ByteArrayOutputStream outPut(String fileNamePre, Workbook workbook) {
+    public ByteArrayOutputStream outPut(String fileNamePre, Workbook workbook) throws Exception {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        try {
-            workbook.write(os);
-        } catch (IOException e) {
-            ExcelException.messageException(ExcelMessageSource.WRITE_ERROR,e.getMessage());
-        }
+        workbook.write(os);
         return os;
     }
 }

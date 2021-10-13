@@ -31,7 +31,7 @@ public class AnnotationFieldColumnHeaderClassReflect<T> {
         List<FieldColumnHeader> list = new ArrayList<>();
         SheetRule sheetRule = clazz.getAnnotation(SheetRule.class);
         if(Objects.isNull(sheetRule) || StringUtils.isBlank(sheetRule.name())){
-            ExcelException.messageException(ExcelMessageSource.WRITE_SHEET_ANNOTATION_SHEET_RULE_NAME_EMPTY);
+            throw ExcelException.messageException(ExcelMessageSource.WRITE_SHEET_ANNOTATION_SHEET_RULE_NAME_EMPTY);
         }
         sheetName = sheetRule.name();
         for (Field field : clazz.getDeclaredFields()) {
@@ -47,7 +47,7 @@ public class AnnotationFieldColumnHeaderClassReflect<T> {
             }
         }
         if(list.size() == 0){
-            ExcelException.messageException(ExcelMessageSource.WRITE_SHEET_ANNOTATION_COLUMN_HEADER_RULE_EMPTY);
+            throw ExcelException.messageException(ExcelMessageSource.WRITE_SHEET_ANNOTATION_COLUMN_HEADER_RULE_EMPTY);
         }
         fieldColumnHeaderList = list.stream().sorted().collect(Collectors.toList());
     }
