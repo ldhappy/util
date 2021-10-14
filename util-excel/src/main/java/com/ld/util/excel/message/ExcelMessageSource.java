@@ -10,7 +10,6 @@ import org.springframework.context.support.ResourceBundleMessageSource;
  * @Date 2021/9/18 10:42
  */
 public class ExcelMessageSource extends ResourceBundleMessageSource {
-    public static final String ANALYSIS_ERROR_XLS_NO_SST_RECORD = "analysisErrorXlsNoSstRecord";
 
     //列头相关错误---开始
     public static final String HEADER_COORDINATE_ERROR = "header.coordinateError";
@@ -41,6 +40,8 @@ public class ExcelMessageSource extends ResourceBundleMessageSource {
     public static final String READ_ROW_CONTENT_READER_EMPTY = "read.rowContentReaderEmpty";
     //文档超过最大可解析的行数，第一个入参：支持的最大可解析行数
     public static final String READ_OVERFLOW_MAX_ROWS = "read.overflowMaxRows";
+
+    public static final String READ_ANALYSIS_ERROR_XLS_NO_SST_RECORD = "read.analysisErrorXlsNoSstRecord";
     //导入指定的文件地址不存在，第一个入参：指定的文件地址
     public static final String READ_SOURCE_INPUT_FILE_NOT_EXIST = "read.sourceInput.fileNotExist";
     //导入的文件类型不支持，第一个入参：当前导入文件类型
@@ -57,6 +58,9 @@ public class ExcelMessageSource extends ResourceBundleMessageSource {
     //模板要求的指定列导入文件中对应位置的列名不一致，第一个入参：规则列索引，第二个入参：模板列名，第三个入参：导入文件列名
     public static final String READ_MATCHING_RULE_UNMATCH_NAME = "read.matchingRule.unMatchName";
     //列头检查相关错误---结束
+
+
+    public static final String READ_RESULT_FAULT_ROW_EMPTY = "read.result.faultRowEmpty";
 
     //导入失败统一使用的异常，第一个入参：错误详情
     public static final String READ_ERROR = "read.error";

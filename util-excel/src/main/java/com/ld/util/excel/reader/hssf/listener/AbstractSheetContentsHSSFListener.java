@@ -101,7 +101,7 @@ public abstract class AbstractSheetContentsHSSFListener implements HSSFListener 
      */
     private void labelSSTHandle(LabelSSTRecord record) {
         if (sstRecord == null) {
-            ExcelException.messageException(ExcelMessageSource.ANALYSIS_ERROR_XLS_NO_SST_RECORD);
+            ExcelException.messageException(ExcelMessageSource.READ_ANALYSIS_ERROR_XLS_NO_SST_RECORD);
         } else {
             cellHandle(sstRecord.getString(record.getSSTIndex()).getString());
         }

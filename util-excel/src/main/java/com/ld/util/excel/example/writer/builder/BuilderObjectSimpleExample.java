@@ -20,8 +20,6 @@ public class BuilderObjectSimpleExample {
         DefaultExcelWriter<String> writer = DefaultExcelWriter.<String>builder()
                 //文件前缀
                 .fileNamePre("BuilderObjectSimpleExample")
-                //本地文件地址前缀
-                .resultOutPut(new FileOutputStreamROP("d://"))
                 //单个工作空间需要打印的信息配置
                 .sheetWriter(StandardSheetWriter.<People>builder()
                         //工作空间名
@@ -49,6 +47,6 @@ public class BuilderObjectSimpleExample {
                         //每一行需要导出的内容---结束
                         .build())
                 .build();
-        log.debug("文件地址："+writer.write());
+        log.debug("文件地址："+writer.write(new FileOutputStreamROP("d://")));
     }
 }

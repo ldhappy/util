@@ -1,17 +1,13 @@
 package com.ld.util.excel.example.read.builder;
 
 import com.ld.util.excel.core.ColumnHeader;
-import com.ld.util.excel.core.ExportColumnHeader;
 import com.ld.util.excel.reader.ExcelReader;
 import com.ld.util.excel.reader.ReadResult;
 import com.ld.util.excel.reader.input.FileSourceInput;
 import com.ld.util.excel.reader.rule.ReadRule;
-import com.ld.util.excel.writer.DefaultExcelWriter;
+import com.ld.util.excel.writer.ExcelErrorOutPutWriter;
 import com.ld.util.excel.writer.output.FileOutputStreamROP;
-import com.ld.util.excel.writer.sheet.StandardSheetWriter;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Objects;
 
 /**
  * @ClassName BuilderObjectSimpleExample
@@ -29,7 +25,14 @@ public class BuilderObjectSimpleExample {
                 .targetClass(People.class)
                 .build();
         ExcelReader<People> excelReader = new ExcelReader<>(new FileSourceInput(),readRule);
-        ReadResult<People> readResult = excelReader.read("d:/BuilderObjectSimpleExample_1634087556390.xlsss");
-        log.info(readResult.toString());
+        String sourceKey = "d:/BuilderObjectSimpleExample_1634087556390.xls";
+        ReadResult<People> readResult = excelReader.read(sourceKey);
+        //打印结果
+        log.debug(readResult.toString());
+        //将错误信息打印成excel
+        ExcelErrorOutPutWriter<String> excelErrorOutPutWriter = ExcelErrorOutPutWriter.<String>builder()
+                .readResult(readResult)
+                .build();
+        log.debug("文件地址："+excelErrorOutPutWriter.write(new FileOutputStreamROP("d://")));
     }
 }

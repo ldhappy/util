@@ -13,7 +13,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import java.util.List;
 
 /**
- * @ClassName StandardSheetExcelWriter
+ * @ClassName DefaultExcelWriter
  * @Description 默认的写excel工具，支持多个sheet输出
  * @Author 梁聃
  * @Date 2021/9/22 9:46
@@ -26,8 +26,8 @@ public class DefaultExcelWriter<R> extends AbstractExcelWriter<R>{
     private List<ISheetWriter> sheetWriterList;
 
     @Builder
-    public DefaultExcelWriter(String fileNamePre, IResultOutPut resultOutPut, Integer rowAccessWindowSize,@Singular("sheetWriter") List<ISheetWriter> sheetWriterList) {
-        super(fileNamePre, resultOutPut, rowAccessWindowSize);
+    public DefaultExcelWriter(String fileNamePre, Integer rowAccessWindowSize,@Singular("sheetWriter") List<ISheetWriter> sheetWriterList) {
+        super(fileNamePre, rowAccessWindowSize);
         if(CollectionUtils.isEmpty(sheetWriterList)){
             throw ExcelException.messageException(ExcelMessageSource.WRITE_SHEET_EMPTY);
         }

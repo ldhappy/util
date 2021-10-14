@@ -74,11 +74,10 @@ public class Main {
     private static String operation(OperationConfig operationConfig, Function<OperationConfig,Collection<? extends ExportColumnHeader<MathematicalProblemRow, ?>>> function) {
         DefaultExcelWriter<String> writer = DefaultExcelWriter.<String>builder()
                 .fileNamePre(operationConfig.getFileNamePre())
-                .resultOutPut(new FileOutputStreamROP("d://"))
                 .rowAccessWindowSize(100)
                 .sheetWriterList(createSheetList(operationConfig,function))
                 .build();
-        return writer.write();
+        return writer.write(new FileOutputStreamROP("d://"));
     }
 
     public static Collection<? extends ISheetWriter> createSheetList(OperationConfig operationConfig, Function<OperationConfig, Collection<? extends ExportColumnHeader<MathematicalProblemRow, ?>>> function) {

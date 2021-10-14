@@ -26,28 +26,22 @@ public abstract class AbstractExcelWriter<R> {
     private String fileNamePre;
 
     /**
-     * excel导出文件输出方式
-     */
-    private IResultOutPut<R> resultOutPut;
-
-    /**
      * 分批次导出文件行数
      */
     private Integer rowAccessWindowSize;
 
-    public AbstractExcelWriter(String fileNamePre, IResultOutPut<R> resultOutPut, Integer rowAccessWindowSize) {
+    public AbstractExcelWriter(String fileNamePre, Integer rowAccessWindowSize) {
         if(StringUtils.isBlank(fileNamePre)){
             throw ExcelException.messageException(ExcelMessageSource.WRITE_FILE_NAME_PRE_EMPTY);
         }
         this.fileNamePre = fileNamePre;
-        if(Objects.isNull(resultOutPut)){
-            throw ExcelException.messageException(ExcelMessageSource.WRITE_RESULT_OUTPUT_EMPTY);
-        }
-        this.resultOutPut = resultOutPut;
         this.rowAccessWindowSize = Objects.isNull(rowAccessWindowSize)?1000:rowAccessWindowSize;
     }
 
-    public R write() throws ExcelException{
+    public R write(IResultOutPut<R> resultOutPut) throws ExcelException{
+        if(Objects.isNull(resultOutPut)){
+            throw ExcelException.messageException(ExcelMessageSource.WRITE_RESULT_OUTPUT_EMPTY);
+        }
         try {
             //采用性能更高的SXSSFWorkbook方式
             SXSSFWorkbook workbook = new SXSSFWorkbook(new XSSFWorkbook(), rowAccessWindowSize);

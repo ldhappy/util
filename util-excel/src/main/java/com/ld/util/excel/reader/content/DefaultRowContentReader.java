@@ -58,10 +58,13 @@ public class DefaultRowContentReader<T> implements RowContentReader<T> {
     @Override
     public void startRow(int index) {
         if(index == readRule.getColumnContentBeginRowIndex()){
+            log.trace("完成列头解析");
             //满足条件表示正文开始，先检查列头是否符合条件
             //1.校验列头名称信息
             readRule.checkColumns(columnHeaderList);
+            readResult.setColumnHeaderList(columnHeaderList);
         }
+        log.trace("开始解析【{}】行",index);
         currentIndex = index;
         if(index >= readRule.getColumnContentBeginRowIndex()){
             //校验不可超过最大行数
@@ -94,6 +97,7 @@ public class DefaultRowContentReader<T> implements RowContentReader<T> {
                     readResult.getSuccessRows().put(object,index);
                     //SuccessRowsOriginal存储excel的原内容，在不能通过内容校验时使用
                     readResult.getSuccessRowsOriginal().put(index,currentRow);
+                    log.trace("【{}】行解析结果【{}】",index,object.toString());
                 } catch (ParseException e) {
                     log.warn(index+"行内容转换失败，原因：",e);
                     readResult.putFaultRow(index,e.getMessage(),currentRow);
@@ -107,7 +111,7 @@ public class DefaultRowContentReader<T> implements RowContentReader<T> {
                 readResult.setTotalRowsSize(readResult.getTotalRowsSize()+1);
             }
         }
-
+        log.trace("完成【{}】行解析",index);
     }
     /**
      * 每个单元格内容解析时调用

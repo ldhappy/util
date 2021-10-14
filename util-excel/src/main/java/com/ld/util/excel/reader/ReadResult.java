@@ -2,6 +2,8 @@ package com.ld.util.excel.reader;
 
 import com.ld.util.excel.core.ColumnHeader;
 import com.ld.util.excel.reader.rule.ReadRule;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +16,12 @@ import java.util.TreeMap;
  * @Author 梁聃
  * @Date 2021/10/8 15:45
  */
+@ToString
 public class ReadResult<T> {
+    /**
+     * 根据导入文件解析的列头
+     */
+    protected List<ColumnHeader> columnHeaderList;
     /**
      * excel解析后错误字段列名
      */
@@ -78,43 +85,12 @@ public class ReadResult<T> {
         return totalRowsSize;
     }
 
-    @Override
-    public String toString() {
-        return "ExcelResult{" +
-                "errorInfoField='" + errorInfoField + '\'' +
-                ", successRows=" + successRowsToString() +
-                ", faultRows=" + faultRowsToString() +
-                ", faultRowsSize=" + getFaultRowsSize() +
-                '}';
+    public List<ColumnHeader> getColumnHeaderList() {
+        return columnHeaderList;
     }
 
-    private String faultRowsToString() {
-        StringBuilder sb = new StringBuilder();
-        if(faultRows != null && faultRows.size() != 0){
-            faultRows.entrySet().stream().forEach(entry -> {
-                sb.append("行号：" + entry.getKey() + "{");
-                if (entry.getValue() != null && entry.getValue().size() != 0) {
-                    for (Map.Entry<String, String> entrySon : entry.getValue().entrySet()) {
-                        sb.append(entrySon.getKey() + ":" + entrySon.getValue() + ", ");
-                    }
-
-                    sb.delete(sb.lastIndexOf(", "), sb.length());
-                }
-                sb.append("}");
-            });
-        }
-        return sb.toString();
-    }
-
-    private String successRowsToString() {
-        StringBuilder sb = new StringBuilder();
-        if(successRows != null && successRows.size() != 0){
-            successRows.entrySet().stream().forEach(entry -> {
-                sb.append("行号：" + entry.getValue());
-                sb.append("{" + entry.getKey() + "}");
-            });
-        }
-        return sb.toString();
+    public void setColumnHeaderList(List<ColumnHeader> columnHeaderList) {
+        this.columnHeaderList = columnHeaderList;
     }
 
     /**

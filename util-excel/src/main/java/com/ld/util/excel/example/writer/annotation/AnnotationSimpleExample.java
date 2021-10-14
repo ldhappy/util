@@ -23,11 +23,9 @@ public class AnnotationSimpleExample {
         DefaultExcelWriter<String> writer = DefaultExcelWriter.<String>builder()
                 //文件前缀
                 .fileNamePre("AnnotationExample")
-                //本地文件地址前缀
-                .resultOutPut(new FileOutputStreamROP("d://"))
                 //单个工作空间需要打印的信息配置
                 .sheetWriter(new AnnotationSheetWriter<People>(peopleList) {})
                 .build();
-        log.debug("文件地址："+writer.write());
+        log.debug("文件地址："+writer.write(new FileOutputStreamROP("d://")));
     }
 }
