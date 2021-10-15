@@ -49,10 +49,6 @@ public class ReadResult<T> {
         return errorInfoField;
     }
 
-    public void setErrorInfoField(String errorInfoField) {
-        this.errorInfoField = errorInfoField;
-    }
-
     public Map<T, Integer> getSuccessRows() {
         return successRows;
     }

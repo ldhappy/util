@@ -97,10 +97,18 @@ public class ExportColumnHeader<T, R> extends ColumnHeader{
         super(columnName, coordinate, coverageColumn, coverageRow);
         this.columnFunction = columnFunction;
         this.contentRowSizeFunction = contentRowSizeFunction;
+        setHeaderStyleFunction(headerStyleFunction);
+        setContentStyleFunction(contentStyleFunction);
+    }
+
+    public void setHeaderStyleFunction(BiFunction<Workbook, Sheet, CellStyle> headerStyleFunction) {
         if(Objects.isNull(headerStyleFunction)){
             headerStyleFunction = this::headerDefaultStyle;
         }
         this.headerStyleFunction = headerStyleFunction.andThen(cellStyle -> headerStyle = cellStyle);
+    }
+
+    public void setContentStyleFunction(BiFunction<Workbook, Sheet, CellStyle> contentStyleFunction) {
         if(Objects.isNull(contentStyleFunction)){
             contentStyleFunction = this::contentDefaultStyle;
         }
@@ -123,6 +131,7 @@ public class ExportColumnHeader<T, R> extends ColumnHeader{
 //        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         //居中
         cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         //自适应列宽 width：256*width+184，width与excel的列宽值大致相同
         if(getCoverageColumn() == 1){
             //只占一列时，需要自适应列宽
@@ -156,6 +165,7 @@ public class ExportColumnHeader<T, R> extends ColumnHeader{
 //        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         //居中
         cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         //自适应列宽 width：256*width+184，width与excel的列宽值大致相同
         if(getCoverageColumn() == 1){
             //只占一列时，需要自适应列宽
@@ -233,6 +243,8 @@ public class ExportColumnHeader<T, R> extends ColumnHeader{
         DataValidation validation = dvHelper.createValidation(dvConstraint, addressList);//添加菜单(将单元格与"名称"建立关联)
         sheet.addValidationData(validation);
     }
+
+
 
     public static void main(String[] args) {
         ExportColumnHeader columnHeader = ExportColumnHeader.exportColumnHeaderBuilder().columnName("test").coordinate("A1").build();

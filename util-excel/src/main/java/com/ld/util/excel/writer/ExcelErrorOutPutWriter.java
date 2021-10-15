@@ -14,10 +14,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -44,27 +47,69 @@ public class ExcelErrorOutPutWriter<R> extends AbstractExcelWriter<R>{
     @Builder
     public ExcelErrorOutPutWriter(String fileNamePre, ReadResult readResult,@Singular("columnHeader") List<ColumnHeader> columnHeaderList) {
         super(StringUtils.isBlank(fileNamePre)?"导入文件错误结果":fileNamePre, 1000);
+        //检查数据，确保有错误内容
         TreeMap<Integer, Map<String, String>> faultRows = readResult.getFaultRows();
         if(MapUtils.isEmpty(faultRows)){
             throw ExcelException.messageException(ExcelMessageSource.READ_RESULT_FAULT_ROW_EMPTY);
         }
-        List<ExportColumnHeader<Map, ?>> exportColumnHeaderList = Lists.newArrayList();
-        if(CollectionUtils.isEmpty(columnHeaderList)){
-            columnHeaderList = readResult.getColumnHeaderList();
-            columnHeaderList.forEach(columnHeader ->
-                            exportColumnHeaderList.add(ExportColumnHeader.<Map,String>exportColumnHeaderBuilder()
-                                    .columnName(columnHeader.getColumnName())
-                                    .coordinate(columnHeader.getCoordinate())
-                                    .coverageRow(columnHeader.getCoverageRow())
-                                    .coverageColumn(columnHeader.getCoverageColumn())
-                                    .columnFunction(map -> map.getOrDefault(ExcelUtil.excelColIndexToStr(columnHeader.getCoordinateColumn()),"").toString())
-                                    .build()));
-        }
+        //转换表头
+        List<ExportColumnHeader<Map, ?>> exportColumnHeaderList = extractColumnHeader(readResult,columnHeaderList);
+
         standardSheetWriter = StandardSheetWriter.<Map>builder()
                 .sheetName("未成功导入数据")
                 .columnHeaderList(exportColumnHeaderList)
                 .contentList(faultRows.entrySet().stream().map(entry->entry.getValue()).collect(Collectors.toList()))
                 .build();
+    }
+
+    /**
+     * 追加错误列头
+     * @param readResult
+     * @param columnHeaderList
+     */
+    private ExportColumnHeader<Map, String> addErrorInfo(ReadResult readResult, List<ColumnHeader> columnHeaderList) {
+        //错误列索引
+        int errorInfoFieldColumnIndex = columnHeaderList.stream().mapToInt(columnHeader->columnHeader.getCoordinateColumn()+columnHeader.getCoverageColumn()).max().getAsInt();
+        int columnHeaderBeginRowIndex = columnHeaderList.stream().mapToInt(columnHeader -> columnHeader.getCoordinateRow()).min().getAsInt();
+        int columnContentBeginRowIndex = columnHeaderList.stream().mapToInt(columnHeader -> columnHeader.getCoordinateRow()+columnHeader.getCoverageRow()).max().getAsInt();
+        String errorInfoFieldColumnIndexStr = ExcelUtil.excelColIndexToStr(errorInfoFieldColumnIndex);
+        ExportColumnHeader<Map, String> errorExportColumnHeader = ExportColumnHeader.<Map,String>exportColumnHeaderBuilder()
+                .columnName("错误信息")
+                .coordinate(errorInfoFieldColumnIndexStr+columnHeaderBeginRowIndex+1)
+                .coverageRow(columnContentBeginRowIndex-columnHeaderBeginRowIndex)
+                .columnFunction(map -> map.getOrDefault(readResult.getErrorInfoField(),"").toString())
+                .build();
+        errorExportColumnHeader.setHeaderStyleFunction((workbook, sheet)->{
+            CellStyle cellStyle = errorExportColumnHeader.headerDefaultStyle(workbook,sheet);
+            //一排显示20个字的错误信息
+            sheet.setColumnWidth(errorInfoFieldColumnIndex,256*40+184);
+            return cellStyle;
+        });
+        return errorExportColumnHeader;
+    }
+
+    /**
+     * 转换表头
+     * @param readResult
+     * @param columnHeaderList
+     * @return
+     */
+    private List<ExportColumnHeader<Map, ?>> extractColumnHeader(ReadResult readResult, List<ColumnHeader> columnHeaderList) {
+        List<ExportColumnHeader<Map, ?>> exportColumnHeaderList = Lists.newArrayList();
+        if(CollectionUtils.isEmpty(columnHeaderList)){
+            columnHeaderList = readResult.getColumnHeaderList();
+        }
+        columnHeaderList.forEach(columnHeader ->
+                exportColumnHeaderList.add(ExportColumnHeader.<Map,String>exportColumnHeaderBuilder()
+                        .columnName(columnHeader.getColumnName())
+                        .coordinate(columnHeader.getCoordinate())
+                        .coverageRow(columnHeader.getCoverageRow())
+                        .coverageColumn(columnHeader.getCoverageColumn())
+                        .columnFunction(map -> map.getOrDefault(ExcelUtil.excelColIndexToStr(columnHeader.getCoordinateColumn()),"").toString())
+                        .build()));
+        //追加错误列头
+        exportColumnHeaderList.add(addErrorInfo(readResult,columnHeaderList));
+        return exportColumnHeaderList;
     }
 
 

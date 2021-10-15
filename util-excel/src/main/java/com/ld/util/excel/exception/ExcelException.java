@@ -15,15 +15,6 @@ public class ExcelException extends IllegalStateException  {
     }
 
     /**
-     * 无需进行堆栈填充，提高异常抛出执行效率
-     * @return
-     */
-    @Override
-    public Throwable fillInStackTrace() {
-        return this;
-    }
-
-    /**
      * 根据模板创建异常
      * @param message 国际化模板名称
      * @param args
