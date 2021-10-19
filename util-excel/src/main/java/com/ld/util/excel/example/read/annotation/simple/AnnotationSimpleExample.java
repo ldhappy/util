@@ -1,6 +1,6 @@
 package com.ld.util.excel.example.read.annotation.simple;
 
-import com.ld.util.excel.reader.ExcelReader;
+import com.ld.util.excel.reader.AnnotationExcelReader;
 import com.ld.util.excel.reader.ReadResult;
 import com.ld.util.excel.reader.input.FileSourceInput;
 import com.ld.util.excel.writer.ExcelErrorOutPutWriter;
@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AnnotationSimpleExample {
     public static void main(String[] args) {
-        ExcelReader<People> excelReader = new ExcelReader<>(new FileSourceInput(),People.class);
+        AnnotationExcelReader<People> excelReader = new AnnotationExcelReader<>(new FileSourceInput(),People.class);
         String sourceKey = "d:\\BuilderObjectSimpleExample_1634550467404.xlsx";
         ReadResult<People> readResult = excelReader.read(sourceKey);
         //打印结果

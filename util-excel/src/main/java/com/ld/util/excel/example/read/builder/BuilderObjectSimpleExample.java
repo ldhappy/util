@@ -1,7 +1,7 @@
 package com.ld.util.excel.example.read.builder;
 
 import com.ld.util.excel.core.ColumnHeader;
-import com.ld.util.excel.reader.ExcelReader;
+import com.ld.util.excel.reader.DefaultExcelReader;
 import com.ld.util.excel.reader.ReadResult;
 import com.ld.util.excel.reader.input.FileSourceInput;
 import com.ld.util.excel.reader.rule.ReadRule;
@@ -24,7 +24,7 @@ public class BuilderObjectSimpleExample {
                 .ruleColumnHeader(ColumnHeader.columnHeaderBuilder().columnName("性别").coordinate("C1").build())
                 .targetClass(People.class)
                 .build();
-        ExcelReader<People> excelReader = new ExcelReader<>(new FileSourceInput(),readRule);
+        DefaultExcelReader<People> excelReader = new DefaultExcelReader<>(new FileSourceInput(),readRule);
         String sourceKey = "d:/BuilderObjectSimpleExample_1634087556390.xls";
         ReadResult<People> readResult = excelReader.read(sourceKey);
         //打印结果

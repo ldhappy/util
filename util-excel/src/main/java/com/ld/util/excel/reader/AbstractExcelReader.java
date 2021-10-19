@@ -20,15 +20,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * @ClassName ExcelReader
- * @Description 解析excel工具，仅支持首个sheet解析
+ * @ClassName AbstractExcelReader
+ * @Description 解析excel工具，抽象类
  * @Author 梁聃
  * @Date 2021/10/9 10:16
  */
 @Slf4j
-public class ExcelReader<T> {
-
-    private static ConcurrentMap<String, AnnotationReadRuleClassReflect<?>> classReflectMap = new ConcurrentHashMap<>();
+public abstract class AbstractExcelReader<T> {
 
     //处理的文件后缀名合集
     private static final List<IInputStreamReader> readerList = Lists.newArrayList(
@@ -39,57 +37,16 @@ public class ExcelReader<T> {
     /**
      * 待解析资源文件输入处理接口
      */
-    private ISourceInput iSourceInput;
+    protected ISourceInput iSourceInput;
 
-    /**
-     * excel的解析规则
-     */
-    private ReadRule<T> readRule;
-
-    /**
-     * 通过编码创建readRule信息
-     * @param iSourceInput
-     * @param readRule
-     */
-    public ExcelReader(ISourceInput iSourceInput, ReadRule<T> readRule) {
+    public AbstractExcelReader(ISourceInput iSourceInput) {
         if (Objects.isNull(iSourceInput)) {
             throw ExcelException.messageException(ExcelMessageSource.READ_SOURCE_INPUT_EMPTY);
         }
         this.iSourceInput = iSourceInput;
-        if (Objects.isNull(readRule)) {
-            throw ExcelException.messageException(ExcelMessageSource.READ_READ_RULE_EMPTY);
-        }
-        this.readRule = readRule;
     }
 
-    /**
-     * 目标类实现了标准注解（@ReadRuleColumnHeader，@ReadRule），可以解析出readRule信息
-     * @param iSourceInput
-     * @param targetClass
-     */
-    public ExcelReader(ISourceInput iSourceInput,Class<T> targetClass) {
-        if (Objects.isNull(iSourceInput)) {
-            throw ExcelException.messageException(ExcelMessageSource.READ_SOURCE_INPUT_EMPTY);
-        }
-        this.iSourceInput = iSourceInput;
-        if(Objects.isNull(targetClass)){
-            throw ExcelException.messageException(ExcelMessageSource.READ_READ_RULE_TARGET_CLASS_EMPTY);
-        }
-        this.readRule = getClassReflect(targetClass).getReadRule();
-    }
-
-    public ReadRule<T> getReadRule() {
-        return readRule;
-    }
-
-    private AnnotationReadRuleClassReflect getClassReflect(Class<T> targetClass) {
-        AnnotationReadRuleClassReflect classReflect = classReflectMap.get(targetClass.getName());
-        if(classReflect == null) {
-            classReflectMap.putIfAbsent(targetClass.getName(),new AnnotationReadRuleClassReflect(targetClass));
-            classReflect=classReflectMap.get(targetClass.getName());
-        }
-        return classReflect;
-    }
+    public abstract ReadRule<T> getReadRule();
 
     /**
      * 使用默认的行信息读取器读取待解析资源文件
@@ -140,7 +97,7 @@ public class ExcelReader<T> {
             //分页读取时可能已经存在读取结果了，所以为空时才创建读取结果
             rowContentReader.setReadResult(new ReadResult<>());
         }
-        rowContentReader.setReadRule(readRule);
+        rowContentReader.setReadRule(getReadRule());
         //检查文件后缀并获取指定的读取器
         //扩展名
         String extString = sourceKey.substring(sourceKey.lastIndexOf(".")).toLowerCase();

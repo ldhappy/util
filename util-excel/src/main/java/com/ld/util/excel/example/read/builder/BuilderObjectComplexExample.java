@@ -2,7 +2,7 @@ package com.ld.util.excel.example.read.builder;
 
 import com.google.common.collect.Lists;
 import com.ld.util.excel.core.ColumnHeader;
-import com.ld.util.excel.reader.ExcelReader;
+import com.ld.util.excel.reader.DefaultExcelReader;
 import com.ld.util.excel.reader.ReadResult;
 import com.ld.util.excel.reader.input.FileSourceInput;
 import com.ld.util.excel.reader.rule.ReadRule;
@@ -31,7 +31,7 @@ public class BuilderObjectComplexExample {
                 .ruleColumnHeaderList(ruleColumnHeaderList)
                 .targetClass(People.class)
                 .build();
-        ExcelReader<People> excelReader = new ExcelReader<>(new FileSourceInput(),readRule);
+        DefaultExcelReader<People> excelReader = new DefaultExcelReader<>(new FileSourceInput(),readRule);
         String sourceKey = "d:\\BuilderObjectSimpleExample_1634196295539.xlsx";
         ReadResult<People> readResult = excelReader.read(sourceKey);
         //打印结果
