@@ -3,6 +3,7 @@ package com.ld.util.excel.reader;
 import com.google.common.collect.Lists;
 import com.ld.util.excel.exception.ExcelException;
 import com.ld.util.excel.message.ExcelMessageSource;
+import com.ld.util.excel.reader.annotation.AnnotationReadRuleClassReflect;
 import com.ld.util.excel.reader.content.DefaultRowContentReader;
 import com.ld.util.excel.reader.content.RowContentReader;
 import com.ld.util.excel.reader.hssf.XlsReader;
@@ -15,6 +16,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * @ClassName ExcelReader
@@ -24,6 +27,9 @@ import java.util.Objects;
  */
 @Slf4j
 public class ExcelReader<T> {
+
+    private static ConcurrentMap<String, AnnotationReadRuleClassReflect<?>> classReflectMap = new ConcurrentHashMap<>();
+
     //处理的文件后缀名合集
     private static final List<IInputStreamReader> readerList = Lists.newArrayList(
             new XlsxReader(),
@@ -40,6 +46,11 @@ public class ExcelReader<T> {
      */
     private ReadRule<T> readRule;
 
+    /**
+     * 通过编码创建readRule信息
+     * @param iSourceInput
+     * @param readRule
+     */
     public ExcelReader(ISourceInput iSourceInput, ReadRule<T> readRule) {
         if (Objects.isNull(iSourceInput)) {
             throw ExcelException.messageException(ExcelMessageSource.READ_SOURCE_INPUT_EMPTY);
@@ -49,6 +60,35 @@ public class ExcelReader<T> {
             throw ExcelException.messageException(ExcelMessageSource.READ_READ_RULE_EMPTY);
         }
         this.readRule = readRule;
+    }
+
+    /**
+     * 目标类实现了标准注解（@ReadRuleColumnHeader，@ReadRule），可以解析出readRule信息
+     * @param iSourceInput
+     * @param targetClass
+     */
+    public ExcelReader(ISourceInput iSourceInput,Class<T> targetClass) {
+        if (Objects.isNull(iSourceInput)) {
+            throw ExcelException.messageException(ExcelMessageSource.READ_SOURCE_INPUT_EMPTY);
+        }
+        this.iSourceInput = iSourceInput;
+        if(Objects.isNull(targetClass)){
+            throw ExcelException.messageException(ExcelMessageSource.READ_READ_RULE_TARGET_CLASS_EMPTY);
+        }
+        this.readRule = getClassReflect(targetClass).getReadRule();
+    }
+
+    public ReadRule<T> getReadRule() {
+        return readRule;
+    }
+
+    private AnnotationReadRuleClassReflect getClassReflect(Class<T> targetClass) {
+        AnnotationReadRuleClassReflect classReflect = classReflectMap.get(targetClass.getName());
+        if(classReflect == null) {
+            classReflectMap.putIfAbsent(targetClass.getName(),new AnnotationReadRuleClassReflect(targetClass));
+            classReflect=classReflectMap.get(targetClass.getName());
+        }
+        return classReflect;
     }
 
     /**

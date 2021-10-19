@@ -4,8 +4,8 @@ import java.lang.annotation.*;
 import java.util.function.Function;
 
 /**
- * @ClassName SheetRule
- * @Description 打印工作表的规则
+ * @ClassName ColumnHeaderRule
+ * @Description 打印列头规则
  * @Author 梁聃
  * @Date 2021/9/26 9:25
  */

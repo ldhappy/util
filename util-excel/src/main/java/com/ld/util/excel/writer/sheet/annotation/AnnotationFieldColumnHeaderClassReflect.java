@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 /**
  * @ClassName AnnotationFieldColumnHeaderClassReflect
- * @Description 存储AnnotationSheetWriter解析过的类型的反射结果
+ * @Description 解析AnnotationSheetWriter的注解
  * @Author 梁聃
  * @Date 2021/9/30 17:00
  */

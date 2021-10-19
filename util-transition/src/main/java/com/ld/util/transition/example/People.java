@@ -13,13 +13,12 @@ public class People{
     /**
      * 名字转换注解
      * sourceName 配对excel的列号，如A,B,C,D
-     * resultName 配对当前熟悉的名称
      * errorTipName 配对列错误提示信息的提示列名
      * 名字转换注解可不写，此时三个值均为属性名
      */
-    @Name(sourceName = "B",resultName = "name")
+    @Name(sourceName = "B")
     private String name;
-    @Name(sourceName = "C",resultName = "age",errorTipName = "年龄")
+    @Name(sourceName = "C",errorTipName = "年龄")
     @Conversion(convertRuleClass = StringToIntegerConvert.class)
     /**
      * 校验规则注解
@@ -31,7 +30,7 @@ public class People{
      */
     @Regulation(rule = "^[0-9]{1,2}$",errorInfo = "请输入0~99之间的正整数")
     private Integer age;
-    @Name(sourceName = "D",resultName = "sex",errorTipName = "性别")
+    @Name(sourceName = "D",errorTipName = "性别")
     /**
      * 转换规则注解
      * convertRuleClass 转换规则类，可参见SexConvert，需实现ConvertRule接口

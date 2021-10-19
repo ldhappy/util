@@ -1,5 +1,7 @@
-package com.ld.util.excel.example.read.builder;
+package com.ld.util.excel.example.read.annotation.simple;
 
+import com.ld.util.excel.reader.annotation.ReadRule;
+import com.ld.util.excel.reader.annotation.ReadRuleColumnHeader;
 import com.ld.util.transition.annotation.Conversion;
 import com.ld.util.transition.annotation.Name;
 import com.ld.util.transition.annotation.Regulation;
@@ -18,8 +20,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ReadRuleColumnHeader(columnName = "姓名",coordinate = "A1")
+@ReadRuleColumnHeader(columnName = "年龄",coordinate = "B1")
+@ReadRuleColumnHeader(columnName = "性别",coordinate = "C1")
 public class People {
-    @Name(sourceName = "A")
+    @Name(sourceName = "A",errorTipName = "姓名")
     private String name;
     @Name(sourceName = "B",errorTipName = "年龄")
     @Conversion(convertRuleClass = StringToIntegerConvert.class)

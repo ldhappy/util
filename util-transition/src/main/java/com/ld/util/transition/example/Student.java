@@ -13,11 +13,10 @@ public class Student extends People {
     /**
      * 名字转换注解
      * sourceName 配对excel的列号，如A,B,C,D
-     * resultName 配对当前熟悉的名称
      * errorTipName 配对列错误提示信息的提示列名
      * 名字转换注解可不写，此时三个值均为属性名
      */
-    @Name(sourceName = "A",resultName = "No",errorTipName="学号")
+    @Name(sourceName = "A",errorTipName="学号")
     /**
      * 校验规则注解
      * rule 简单的校验正则
@@ -28,7 +27,7 @@ public class Student extends People {
      */
     @Regulation(ruleClass = NoRule.class)
     private String No;
-    @Name(sourceName = "E",resultName = "birthday",errorTipName="出生日期")
+    @Name(sourceName = "E",errorTipName="出生日期")
     //@Conversion(convertRuleClass = StringToDateConvert.class)
     private Date birthday;
 

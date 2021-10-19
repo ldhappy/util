@@ -36,6 +36,7 @@ public class ExcelMessageSource extends ResourceBundleMessageSource {
     public static final String READ_SOURCE_KEY_EMPTY = "read.sourceKeyEmpty";
     public static final String READ_SOURCE_INPUT_EMPTY = "read.sourceInputEmpty";
     public static final String READ_READ_RULE_EMPTY = "read.readRuleEmpty";
+    public static final String READ_READ_RULE_HEADER_EMPTY = "read.readRuleHeaderEmpty";
     public static final String READ_READ_RULE_TARGET_CLASS_EMPTY = "read.readRule.targetClassEmpty";
     public static final String READ_ROW_CONTENT_READER_EMPTY = "read.rowContentReaderEmpty";
     //文档超过最大可解析的行数，第一个入参：支持的最大可解析行数

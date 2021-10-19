@@ -12,8 +12,6 @@ import java.lang.annotation.*;
 public @interface Name {
     //入参属性名称
     String sourceName() default "";
-    //解析属性名称
-    String resultName() default "";
     //错误提示属性名称
     String errorTipName() default "";
 }

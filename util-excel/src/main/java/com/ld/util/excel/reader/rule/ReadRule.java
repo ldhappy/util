@@ -1,7 +1,6 @@
 package com.ld.util.excel.reader.rule;
 
 import com.google.common.collect.Lists;
-import com.google.common.reflect.TypeToken;
 import com.ld.util.excel.core.ColumnHeader;
 import com.ld.util.excel.exception.ExcelException;
 import com.ld.util.excel.message.ExcelMessageSource;
@@ -9,9 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Singular;
 import lombok.ToString;
+import org.apache.commons.collections4.CollectionUtils;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -57,10 +55,12 @@ public class ReadRule<T> {
             throw ExcelException.messageException(ExcelMessageSource.READ_READ_RULE_TARGET_CLASS_EMPTY);
         }
         this.targetClass = targetClass;
-        //规则列名List规则列名为空时，赋值一个空list,不为空则进行一次排序保证规则是有正确顺序的
-        this.ruleColumnHeaderList = Objects.isNull(ruleColumnHeaderList)?
-                Lists.newArrayList():
-                ruleColumnHeaderList.stream().sorted().collect(Collectors.toList());
+        if(CollectionUtils.isEmpty(ruleColumnHeaderList)){
+            throw ExcelException.messageException(ExcelMessageSource.READ_READ_RULE_HEADER_EMPTY);
+        }
+        //规则列名List规则列名进行一次排序保证规则是有正确顺序的
+        this.ruleColumnHeaderList = ruleColumnHeaderList.stream().sorted().collect(Collectors.toList());
+
         this.columnHeaderBeginRowIndex = Objects.isNull(columnHeaderBeginRowIndex)?
                 ruleColumnHeaderList.stream().mapToInt(columnHeader -> columnHeader.getCoordinateRow()).min().getAsInt() :
                 columnHeaderBeginRowIndex;
@@ -70,7 +70,7 @@ public class ReadRule<T> {
         this.maxRows = maxRows;
         this.matchingRule = Objects.isNull(matchingRule)?
                 //不进行列头匹配校验的规则-----默认规则
-                MatchingRule.NULL_MATCHING_RULE:
+                new CompleteMatchingRule():
                 matchingRule;
     }
 
